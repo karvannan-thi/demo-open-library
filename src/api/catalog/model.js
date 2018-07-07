@@ -16,15 +16,14 @@ const catalogSchema = new Schema({
   created_by: {
     type: String
   },
-  Additional_info: {
-    type: String
-  }
+  Additional_info: { type: mongoose.Schema.Types.Mixed }
 }, {
   timestamps: true,
   toJSON: {
     virtuals: true,
     transform: (obj, ret) => { delete ret._id }
   }
+  
 })
 
 catalogSchema.methods = {
@@ -37,14 +36,15 @@ catalogSchema.methods = {
       ISBN: this.ISBN,
       author: this.author,
       created_by: this.created_by,
-      Additional_info: this.Additional_info,
+      
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }
 
     return full ? {
-      ...view
+      ...view,
       // add properties for a full view
+      Additional_info: this.Additional_info,
     } : view
   }
 }

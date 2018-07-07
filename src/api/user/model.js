@@ -4,6 +4,7 @@ import randtoken from 'rand-token'
 import mongoose, { Schema } from 'mongoose'
 import mongooseKeywords from 'mongoose-keywords'
 import { env } from '../../config'
+import { Catalog } from '../catalog/'
 
 const roles = ['user', 'admin']
 
@@ -38,7 +39,10 @@ const userSchema = new Schema({
   picture: {
     type: String,
     trim: true
-  }
+  },
+  catalog : [
+    { type: String, ref: 'Catalog' }
+  ]
 }, {
   timestamps: true
 })

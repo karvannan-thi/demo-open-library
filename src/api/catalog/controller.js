@@ -1,12 +1,13 @@
 import { success, notFound } from '../../services/response/'
 import { Catalog } from '.'
 
-export const create = ({ bodymen: { body } }, res, next) =>
+export const create = ({user, bodymen: { body } }, res, next) =>{
+  body.created_by = user.id
   Catalog.create(body)
     .then((catalog) => catalog.view(true))
     .then(success(res, 201))
     .catch(next)
-
+}
 export const index = ({ querymen: { query, select, cursor } }, res, next) =>
   Catalog.count(query)
     .then(count => Catalog.find(query, select, cursor)
@@ -25,17 +26,17 @@ export const show = ({ params }, res, next) =>
     .then(success(res))
     .catch(next)
 
-export const update = ({ bodymen: { body }, params }, res, next) =>
+export const update = ({user, bodymen: { body }, params }, res, next) =>
   Catalog.findById(params.id)
     .then(notFound(res))
-    .then((catalog) => catalog ? Object.assign(catalog, body).save() : null)
+    .then((catalog) => catalog.created_by==user.id  ? Object.assign(catalog, body).save() : null)
     .then((catalog) => catalog ? catalog.view(true) : null)
     .then(success(res))
     .catch(next)
 
-export const destroy = ({ params }, res, next) =>
+export const destroy = ({user, params }, res, next) =>
   Catalog.findById(params.id)
     .then(notFound(res))
-    .then((catalog) => catalog ? catalog.remove() : null)
+    .then((catalog) => catalog.created_by==user.id  ? catalog.remove() : null)
     .then(success(res, 204))
     .catch(next)

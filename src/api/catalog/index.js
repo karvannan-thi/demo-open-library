@@ -27,8 +27,8 @@ const { type, title, ISBN, author, created_by, Additional_info } = schema.tree
  * @apiError 401 admin access only.
  */
 router.post('/',
-  token({ required: true, roles: ['admin'] }),
-  body({ type, title, ISBN, author, created_by, Additional_info }),
+  token({ required: true, roles: ['user'] }),
+  body({ type, title, ISBN, author, Additional_info }),
   create)
 
 /**
@@ -44,7 +44,6 @@ router.post('/',
  * @apiError 401 master access only.
  */
 router.get('/',
-  master(),
   query(),
   index)
 
@@ -60,7 +59,6 @@ router.get('/',
  * @apiError 401 master access only.
  */
 router.get('/:id',
-  master(),
   show)
 
 /**
@@ -81,8 +79,8 @@ router.get('/:id',
  * @apiError 401 admin access only.
  */
 router.put('/:id',
-  token({ required: true, roles: ['admin'] }),
-  body({ type, title, ISBN, author, created_by, Additional_info }),
+  token({ required: true, roles: ['user'] }),
+  body({ type, title, ISBN, author, Additional_info }),
   update)
 
 /**
@@ -96,7 +94,7 @@ router.put('/:id',
  * @apiError 401 admin access only.
  */
 router.delete('/:id',
-  token({ required: true, roles: ['admin'] }),
+  token({ required: true, roles: ['user'] }),
   destroy)
 
 export default router
