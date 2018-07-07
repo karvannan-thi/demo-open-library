@@ -44,7 +44,14 @@ router.post('/',
  * @apiError 401 master access only.
  */
 router.get('/',
-  query(),
+  query({
+    title: {
+      paths: ['title']
+    },
+    isbn:{
+      paths: ['ISBN']
+    }
+  }),
   index)
 
 /**
