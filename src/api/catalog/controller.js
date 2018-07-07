@@ -1,9 +1,14 @@
-import { success, notFound } from '../../services/response/'
+import { success, notFound ,error} from '../../services/response/'
 import { Catalog } from '.'
 
 export const create = ({user, bodymen: { body } }, res, next) =>{
   body.created_by = user.id
-  Catalog.create(body)
+  Catalog.findOne({$or:[{'title':body.title},{'ISBN':body.ISBN}]})
+    .then((catalog) => {
+      if(catalog)  
+        throw "Book already exist";
+      return Catalog.create(body);
+    })
     .then((catalog) => catalog.view(true))
     .then(success(res, 201))
     .catch(next)
